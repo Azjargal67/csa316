@@ -32,44 +32,19 @@ app.post("/login", async (req, res) => {
   });
 });
 
-/* ===== ADD COUNSELOR ===== */
-app.post("/admin/add-counselor", async (req, res) => {
-  const { name, email, phone, password } = req.body;
-
-  const exists = await User.findOne({ email });
-  if (exists) {
-    return res.status(400).json({ message: "Email already exists" });
-  }
-
-  const hashed = bcrypt.hashSync(password, 10);
-
-  const counselor = new User({
-    name,
-    email,
-    phone,
-    password: hashed,
-    role: "counselor",
+/* ===== START SERVER ONLY IF NOT TEST ===== */
+if (require.main === module) {
+  const PORT = 4000;
+  app.listen(PORT, () => {
+    console.log(`Backend running on http://localhost:${PORT}`);
   });
+}
 
-  await counselor.save();
-
-  res.json({ message: "Counselor created successfully" });
-});
-
-/* ===== GET ALL COUNSELORS ===== */
-app.get("/admin/counselors", async (req, res) => {
-  try {
-    const counselors = await User.find({ role: "counselor" }).select(
-      "-password"
-    );
-    res.json(counselors);
-  } catch (err) {
-    res.status(500).json({ message: "Failed to fetch counselors" });
-  }
-});
+/* ===== EXPORT APP FOR TESTING ===== */
+module.exports = app;
 
 /* ===== START SERVER ===== */
-const PORT = 4000;
-app.listen(PORT, () => {
-  console.log(`Backend running on http://localhost:${PORT}`);
-});
+// const PORT = 4000;
+// app.listen(PORT, () => {
+//   console.log(`Backend running on http://localhost:${PORT}`);
+// });
