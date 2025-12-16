@@ -17,9 +17,9 @@ describe("Auth API Test", () => {
       email: "admin@test.com",
       password: "wrong",
     });
-    it("INTENTIONAL CI FAILURE", () => {
-      expect(1).toBe(2); //FAIL shalgah
-    });
+    // it("INTENTIONAL CI FAILURE", () => {
+    //   expect(1).toBe(2); //FAIL shalgah
+    // });
 
     expect(res.statusCode).toBe(401);
   });
